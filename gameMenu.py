@@ -1,15 +1,7 @@
-"""
-Trying to construct an interactive menu
-loop to recieve Yes/No input
+from sys import exit
+from itertools import islice
 
-while True:
-    query = input('\nshall we begin?\n ') #\n supposed to receive input in nextline
-    if query == '' or not query[0].lower() in ['y','n']: #Will not accept answers not starting with 'y' or 'n'
-        print('HaHa Dont do that! Yes or No?')
-    else:
-        break #Break loop
-"""
-menu = { #Dictionary of GameMenu: Here we have a dict of dict featuring different games in dictionaries of their game category
+menu = { #A dict{dict{}} featuring multiple games in dictionaries of their game category
     'GameCat1': {
         'Game1':'Description of G1',
         'Game2':'Description of G2',
@@ -27,42 +19,54 @@ menu = { #Dictionary of GameMenu: Here we have a dict of dict featuring differen
     }
 }
 
-#Class so this damn thing can be imported tfffff
-class main_menu(): #Game menu class
-    def show_categories(self): #Show game category
+#A class so this menu display architecture can be imported and reused
+class display_menu(): #Game menu class
+    def __init__(self):
+        query = input('\nShall we begin? ')
+        if query == '' or not query[0].lower() in ['y','n']: #Checks user input
+            print('Error: Yes or No?')
+        elif query[0].lower() in ['y']:
+            with open('Welcome Message.txt') as lines: #Reads welcome message from a file
+                for line in islice(lines, 7):
+                    print(line, end="")
+            self.show_categories() #Calls show_category after welcome message
+
+    def show_categories(self):
+        print('\n\nAvailable game categories are:') 
         for category in menu.keys():
-            print(category)
+            print(category) #.keys() calls main dict key value
+        Cat_obj = input('\nPlease choose or create a category: ')
+        self.show_Games(Cat_obj)
 
-
-    def show_Games(self, category): #show games
+    def show_Games(self, category):
         if category in menu:
-            game = menu[category]
+            game = menu[category] #what?
             for game, description in game.items():
-                print(f'{game}:{description}')
+                print(f'{game} : {description}')
         else:
-            print(f'Category {category} does not exist')
-            #should pass an do yu want to try again or some typer continuation clause
+            query = input('\nYour chosen category is not defined. Would you like to define your own game category?\n')
+            if query == '' or not query[0].lower() in ['y','n']:
+                    print('Dont be silly! Yes or No?')
+            elif query[0].lower() in ['y']:
+                game = input('\nPlease enter a game name: ')
+                description = input('\nplease enter a description of your game: ')
+                self.new_Category(category, game, description)
+            else:
+                print('GoodBye')
+                exit()
 
     def new_Category(self, category, game, description):
-        if category not in menu:
-            while True:
-                query = input('\nYour chosen category is not defined. Would you like to define your own game category?\n')
-                if query == '' or not query[0].lower() in ['y','n']:
-                    print('Dont be silly! Yes or No?')
-                elif query[0].lower() in ['y']:
-                    menu[category] = {}
-                    menu[category][game] = description
-                    print(f'Added "{game}" to the "{category}" with description: "{description}"')
-                else:
-                    break
+        menu[category] = {}
+        menu[category][game] = description
+        print(f'Added "{game}" to the "{category}" with description: "{description}"')
+       # query = input('\nWould you like to exit?')
 
 
 
 
-menu_display = main_menu() #instance of the class
-print('Game categories are')
-menu_display.show_categories() #display default game categories
 
-MyCatOBJ = 'GameCat4'
-print(f'\nGames in {MyCatOBJ} category are:')
-menu_display.show_Games(MyCatOBJ)
+menu_display = display_menu() #instance of the class
+#print('Game categories are')
+#menu_display.show_categories() #display default game categories
+
+#print(f'\nGames in {MyCatOBJ} category are:')

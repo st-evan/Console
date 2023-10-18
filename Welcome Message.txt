@@ -1,0 +1,7 @@
+
+Welcome to Noob_Nirvana.
+<blah blah welcome message stuff stuff>.
+This is a console project i'm building
+I will add more and more features whenever something cool pops up.
+Come on and join the project. Send me a pull request.
+Hope you enjoi it. Seek bugs, pull, fix and commit.
