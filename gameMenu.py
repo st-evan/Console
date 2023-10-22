@@ -3,7 +3,7 @@ from itertools import islice
 from time import sleep
 
 menu = { #A dict{dict{}} featuring multiple games in dictionaries of their game category
-    'GameCat1': {
+    'Lists': {
         'Game1':'Description of G1',
         'Game2':'Description of G2',
         'Game3':'Description of G3'
@@ -75,6 +75,7 @@ class display_menu(): #Game menu class
             gameVar = menu[categoryVar] #what?
             for game, description in gameVar.items():
                 print(f'{game} : {description}')
+            self.load_game(game)##################
         else:
             query = input('\nYour chosen category is not defined. Would you like to define your own game category?\n')
             if query == '' or not query[0].lower() in ['y','n']:
@@ -82,7 +83,7 @@ class display_menu(): #Game menu class
             elif query[0].lower() in ['y']:
                 game = input('\nPlease enter a game name: ')
                 description = input('\nplease enter a description of your game: ')
-                self.new_Category(category, game, description)
+                self.new_Category(category, game, description)#Allows user to add a new game and category
             else:
                 print('GoodBye')
                 exit()
@@ -90,9 +91,11 @@ class display_menu(): #Game menu class
     def new_Category(self, category, game, description):
         menu[category] = {}
         menu[category][game] = description
-        print(f'Added "{game}" to the "{category}" with description: "{description}"')
+        print(f'Added "{game}" to the "{category}" with description: "{description}"\nAdd game feature coming soon!')
        # query = input('\nWould you like to exit?')
 
+    def load_game(self,game):
+        print(game)
 
 
 
