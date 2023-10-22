@@ -1,5 +1,6 @@
 from sys import exit
 from itertools import islice
+from time import sleep
 
 menu = { #A dict{dict{}} featuring multiple games in dictionaries of their game category
     'GameCat1': {
@@ -22,26 +23,57 @@ menu = { #A dict{dict{}} featuring multiple games in dictionaries of their game 
 #A class so this menu display architecture can be imported and reused
 class display_menu(): #Game menu class
     def __init__(self):
-        query = input('\nShall we begin? ')
-        if query == '' or not query[0].lower() in ['y','n']: #Checks user input
-            print('Error: Yes or No?')
-        elif query[0].lower() in ['y']:
-            with open('Welcome Message.txt') as lines: #Reads welcome message from a file
-                for line in islice(lines, 7):
-                    print(line, end="")
-            self.show_categories() #Calls show_category after welcome message
-
+        #user_name = input("Hello, what is your name? ")
+        #print("Do hold on, Mr", user_name)
+        #for char in "Loading...":
+            #print(char,end="",flush=True)
+            #sleep(0.5)
+        
+      
+        #Condition to check how many times user entered wrong input
+        wrong_input_counter = 0
+        while wrong_input_counter < 3:
+            query = input('\nShall we begin? ')
+            if query == '' or not query[0].lower() in ['y','n']:#Checks user input is empty string or is not yes or no
+                wrong_input_counter +=1
+                if wrong_input_counter == 3: #When wrong input has been entered thrice
+                    exit_program = input("\nInvalid!! Do you want to exit?(y/n): ")
+                    if exit_program.lower() == "y":
+                        print("Unserious priq")
+                        exit()
+                    elif exit_program[0].lower() in ['n']:
+                            wrong_input_counter = 0
+                    elif exit_program == '' or not query[0].lower() in ['y','n']:
+                        exit()                       
+                print('Error: Yes or No?')
+            
+            #Reads welcome message from a file if true and Calls show_category() after welcome message
+            elif query[0].lower() in ['y']:
+                with open('Welcome Message.txt') as lines:
+                    for line in islice(lines, 7):
+                        print(line, end="")
+                        #sleep(0.5)
+                #sleep(0.5)
+                self.show_categories()
+            
+            elif query[0].lower() in ['n']:
+                print("Well fok off then")
+                exit()
+            
     def show_categories(self):
-        print('\n\nAvailable game categories are:') 
+        print('\n\nAvailable game categories are:')
         for category in menu.keys():
             print(category) #.keys() calls main dict key value
-        Cat_obj = input('\nPlease choose or create a category: ')
-        self.show_Games(Cat_obj)
+            sleep(0.5)
+        choice = input('\nPlease choose or create a category: ')
+        self.show_Games(choice)
 
     def show_Games(self, category):
-        if category in menu:
-            game = menu[category] #what?
-            for game, description in game.items():
+        categoryLC = category.lower()
+        if categoryLC in [key.lower() for key in menu]: #creates a list comprehension of keys in menu_dict
+            categoryVar = next(key for key in menu if key.lower() == categoryLC)#A generator expresson inside a next() func
+            gameVar = menu[categoryVar] #what?
+            for game, description in gameVar.items():
                 print(f'{game} : {description}')
         else:
             query = input('\nYour chosen category is not defined. Would you like to define your own game category?\n')
