@@ -77,4 +77,53 @@ def game_of_life():
 
         sleep(1)
 
-game_of_life()
+
+
+def coin_flip():
+    NumOfStreaks = 0
+    fliplst = []
+
+    # Generate 10,000 random coin flips
+    for _ in range(10000):
+        if randint(0, 1) == 1:
+            fliplst.append('H')  # Heads
+        else:
+            fliplst.append('T')  # Tails
+
+    total_t_streaks = 0
+    total_h_streaks = 0
+
+    current_index = 0
+
+    while current_index < len(fliplst):
+        batch = fliplst[current_index: current_index + 100]  # Create a sublist of 100 values from fliplst
+
+        t_streaks = 0
+        h_streaks = 0
+
+        # Count streaks in the current batch
+        for i in range(len(batch) - 5): #Iterate through the batch
+            if "T" * 6 in ''.join(batch[i:i + 6]):#count T
+                t_streaks += 1
+            if "H" * 6 in ''.join(batch[i:i + 6]):#count H
+                h_streaks += 1
+
+        total_t_streaks += t_streaks
+        total_h_streaks += h_streaks
+
+        # Move to the next batch
+        current_index += 100
+
+        print(f"Batch of 100 flips: {batch}")
+        print(f"Number of Tails streaks in this batch: {t_streaks}" )
+        print(f"Number of Heads streaks in this batch: {h_streaks}\n")
+
+    # Calculate the total percentage of streaks for each separately
+    percentage_t = (total_t_streaks / 10000) * 100
+    percentage_h = (total_h_streaks / 10000) * 100
+
+    print(f"Total number of Tails streaks: {total_t_streaks}")
+    print(f"% of Tail streaks in the entire sample(size 10000): {percentage_t}")
+  
+    print(f"Total number of Heads streaks: {total_h_streaks}")
+    print(f"% of Head streaks in the entire sample(size 10000): {percentage_h}")
